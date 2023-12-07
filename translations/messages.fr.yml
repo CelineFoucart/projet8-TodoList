@@ -1,0 +1,10 @@
+ROLE_ADMIN: Administrateur
+ROLE_USER: Utilisateur
+Username: Identifiant
+password:
+  first: Mot de passe
+  second: Tapez le mot de passe à nouveau
+Email: Email
+Roles: Rôles
+Title: Titre
+Content: Contenu

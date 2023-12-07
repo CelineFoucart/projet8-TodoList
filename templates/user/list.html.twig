@@ -1,13 +1,23 @@
 {% extends 'base.html.twig' %}
 
-{% block header_img %}{% endblock %}
+{% block header_title %}{% endblock %}
 
-{% block header_title %}<h1>Liste des utilisateurs</h1>{% endblock %}
+{#  #}
 
 {% block body %}
+    <header class="row">
+        <div class="col-9">
+            <h2 class="h1 mb-4">Liste des utilisateurs</h2>
+        </div>
+        <div class="col-3 text-end">
+            <a class="btn btn-primary btn-sm" href="{{ path('user_create') }}">Créer un utilisateur</a>
+        </div>
+    </header>
+
+
     {% if users|length == 0 %}
         <div class="alert alert-warning" role="alert">
-            Il n'y a pas encore d'utilisateur enregistré. <a href="{{ path('user_create') }}" class="btn btn-warning pull-right">Créer un utilisateur</a>
+            Il n'y a pas encore d'utilisateur enregistré.
         </div>
     {% else %}
         <div class="row">
@@ -23,11 +33,11 @@
                 <tbody>
                 {% for user in users %}
                     <tr>
-                        <th scope="row">{{ loop.index }}</th>
+                        <th scope="row">{{ user.id }}</th>
                         <td>{{ user.username }}</td>
                         <td>{{ user.email }}</td>
                         <td>
-                            <a href="{{ path('user_edit', {'id' : user.id}) }}" class="btn btn-success btn-sm">Edit</a>
+                            <a href="{{ path('user_edit', {'id' : user.id}) }}" class="btn btn-success btn-sm">Editer</a>
                         </td>
                     </tr>
                 {% endfor %}

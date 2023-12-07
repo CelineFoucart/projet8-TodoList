@@ -1,6 +1,16 @@
 {% extends 'base.html.twig' %}
 
-{% block header_title %}<h1>Modifier <strong>{{ user.username }}</strong></h1>{% endblock %}
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('plugins/tom-select.bootstrap5.min.css') }}">
+{% endblock %}
+{% block javascripts %}
+<script src="{{ asset('plugins/tom-select.base.js') }}"></script>
+<script>
+new TomSelect('#user_roles',{plugins: ['remove_button']});
+</script>
+{% endblock %}
+
+{% block header_title %}Modifier <strong>{{ user.username }}</strong>{% endblock %}
 {% block header_img %}{% endblock %}
 
 {% block body %}
