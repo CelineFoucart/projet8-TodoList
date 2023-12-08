@@ -13,4 +13,11 @@ class DefaultController extends AbstractController
     {
         return $this->render('default/index.html.twig');
     }
+
+    #[Route('/terms', name: 'app_terms')]
+    public function termsAction(): Response
+    {
+        return $this->render('default/terms.html.twig');
+    }
+    
 }
