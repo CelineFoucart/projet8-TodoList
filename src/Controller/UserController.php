@@ -46,7 +46,7 @@ class UserController extends AbstractController
             return $this->redirectToRoute('user_list');
         }
 
-        return $this->render('user/create.html.twig', ['form' => $form->createView()]);
+        return $this->render('user/create.html.twig', ['form' => $form]);
     }
     
     #[Route(path: '/users/{id}/edit', name: 'user_edit')]
@@ -60,7 +60,7 @@ class UserController extends AbstractController
             
             if ($plainPassword !== null) {
                 $user->setPassword(
-                    $this->userPasswordHasher->hashPassword(
+                    $userPasswordHasher->hashPassword(
                         $user,
                         $plainPassword
                     )
@@ -75,6 +75,6 @@ class UserController extends AbstractController
             return $this->redirectToRoute('user_list');
         }
 
-        return $this->render('user/edit.html.twig', ['form' => $form->createView(), 'user' => $user]);
+        return $this->render('user/edit.html.twig', ['form' => $form, 'user' => $user]);
     }
 }

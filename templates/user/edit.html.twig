@@ -1,8 +1,11 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}Editer un utilisateur | Administration{% endblock %}
+
 {% block stylesheets %}
     <link rel="stylesheet" href="{{ asset('plugins/tom-select.bootstrap5.min.css') }}">
 {% endblock %}
+
 {% block javascripts %}
 <script src="{{ asset('plugins/tom-select.base.js') }}"></script>
 <script>
@@ -10,9 +13,18 @@ new TomSelect('#user_roles',{plugins: ['remove_button']});
 </script>
 {% endblock %}
 
-{% block header_title %}Modifier <strong>{{ user.username }}</strong>{% endblock %}
-
 {% block body %}
+    <header class="row">
+        <div class="col-md-9">
+            <h2 class="h1 mb-4">Modifier le compte <strong>{{ user.username }}</strong></h2>
+        </div>
+        <div class="col-md-3 text-end">
+            <a href="{{ path('user_list') }}" class="btn btn-primary btn-sm">
+                <i class="bi bi-arrow-left"></i> Retour
+            </a>
+        </div>
+    </header>
+
     <div class="row">
         <p class="text-muted">Laissez vide le champ mot de passe pour ne pas changer le mot de passe.</p>
         {{ form_start(form, {'action' : path('user_edit', {'id' : user.id})}) }}

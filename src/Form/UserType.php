@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -19,6 +20,7 @@ class UserType extends AbstractType
         
         $builder
             ->add('username', TextType::class)
+            ->add('email', EmailType::class)
             ->add('plainPassword', RepeatedType::class, [
                 'type' => PasswordType::class,
                 'mapped' => false,
@@ -38,7 +40,7 @@ class UserType extends AbstractType
                 'required' => true,
                 'multiple' => true
             ])
-            ->add('email', EmailType::class)
+            ->add('isVerified', CheckboxType::class, ['required' => false])
         ;
     }
 }

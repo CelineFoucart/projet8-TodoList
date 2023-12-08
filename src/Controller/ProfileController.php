@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use App\Form\ProfileType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,6 +18,7 @@ class ProfileController extends AbstractController
     #[Route('/profile', name: 'app_profile')]
     public function index(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
     {
+        /** @var User */
         $user = $this->getUser();
 
         if (null === $user) {
@@ -31,7 +33,7 @@ class ProfileController extends AbstractController
             
             if ($plainPassword !== null) {
                 $user->setPassword(
-                    $this->userPasswordHasher->hashPassword(
+                    $userPasswordHasher->hashPassword(
                         $user,
                         $plainPassword
                     )
