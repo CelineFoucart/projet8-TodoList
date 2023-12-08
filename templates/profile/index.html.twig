@@ -5,6 +5,37 @@
 {% block body %}
 <header>
     <h2 class="h1 mb-4">Profil</h2>
+    <p>Vous êtes connecté en tant que <strong>{{ user.username }}</strong>.</p>
 </header>
+
+{{ form_start(form) }}
+        <div class="row">
+            <section class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="h5 card-title">Compte</h3>
+                    </div>
+                    <div class="card-body">
+                        {{ form_row(form.username) }}
+                        {{ form_row(form.email) }}
+                    </div>
+                </div>
+            </section>  
+            <section class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="h5 card-title">Mot de passe</h3>
+                    </div>
+                    <div class="card-body">
+                        {{ form_row(form.plainPassword) }}
+                    </div>
+                </div>
+            </section>
+
+            <div class="col-12 pt-2">
+                <button type="submit" class="btn btn-success">Enregistrer</button>
+            </div>
+        </div>
+    {{ form_end(form) }}
 
 {% endblock %}
