@@ -1,0 +1,16 @@
+#header {
+    margin-top: 48px;
+    height: 600px;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.92), rgba(54, 54, 54, 0.5)), url(../img/todolist_homepage.jpg) center center / cover no-repeat;
+}
+
+label.required::after {
+    content: '*';
+    display: inline;
+    padding-left: 3px;
+}
