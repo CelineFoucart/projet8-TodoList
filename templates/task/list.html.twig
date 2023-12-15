@@ -12,14 +12,21 @@
         </div>
     </header>
     
-    <div class="row">
+    <div class="row g-3">
         {% for task in tasks %}
         <div class="col-sm-4 col-lg-4 col-md-4">
-            <div class="card">
+            <div class="card h-100">
                 <div class="card-body">
                     <div class="row">
                         <div class="col-10">
                             <h4 class="card-title"><a href="{{ path('task_edit', {'id' : task.id }) }}">{{ task.title }}</a></h4>
+                            <p class="small">
+                                {% if task.author is not null %}
+                                    Par <strong>{{ task.author.username }}</strong>
+                                {% else %}
+                                    Par <strong>un utilisateur anonyme</strong>
+                                {% endif %}
+                            </p>
                         </div>
                         <div class="col-2 text-end">
                             <span class="h4">
@@ -32,16 +39,21 @@
                         </div>
                     </div>
                     <p class="card-text">{{ task.content }}</p>
-
-                    <form action="{{ path('task_toggle', {'id' : task.id }) }}" class="d-inline-block">
-                        <button class="btn btn-success btn-sm pull-right">
-                            {% if not task.isDone %}Marquer comme faite{% else %}Marquer non terminée{% endif %}
-                        </button>
-                    </form>
-                    <form action="{{ path('task_delete', {'id' : task.id }) }}" class="d-inline-block">
-                        <button class="btn btn-danger btn-sm pull-right">Supprimer</button>
-                    </form>
                 </div>
+                {% if is_granted('ROLE_ADMIN') or (task.author and task.author.id == app.user.id) %}
+                    <div class="card-footer">
+                        <form action="{{ path('task_toggle', {'id' : task.id }) }}" class="d-inline-block" method="post">
+                            <input type="hidden" name="_token" value="{{ csrf_token('toggle' ~ task.id) }}">
+                            <button class="btn btn-success btn-sm pull-right" type="submit">
+                                {% if not task.isDone %}Marquer comme faite{% else %}Marquer non terminée{% endif %}
+                            </button>
+                        </form>
+                        <form action="{{ path('task_delete', {'id' : task.id }) }}" class="d-inline-block" method="post">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ task.id) }}">
+                            <button class="btn btn-danger btn-sm pull-right" type="submit">Supprimer</button>
+                        </form>
+                    </div>
+                {% endif %}
             </div>
         </div>
         {% else %}
