@@ -1,17 +1,23 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Test;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use App\Tests\FixtureTrait;
 
 class DefaultControllerTest extends WebTestCase
 {
-    public function testIndex()
+    use FixtureTrait;
+
+    public function testHomePageAsAnonymous(): void
     {
         $client = static::createClient();
-
-        $crawler = $client->request('GET', '/');
-
+        $this->makeFixture();
+        $client->request('GET', '/');
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
+        $this->assertSelectorTextContains('#login-btn', "Se connecter");
+        $this->assertSelectorTextContains('#register-btn', "S'inscrire");
     }
 }
