@@ -33,6 +33,7 @@ class ApplicationAvailabilityRoutesTest extends WebTestCase
         yield ['/'];
         yield ['/login'];
         yield ['/register'];
+        yield ['/terms'];
         
     }
 
