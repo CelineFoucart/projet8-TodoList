@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -16,7 +17,12 @@ class UserType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $id = $options['data']->getId();
+        $data = $options['data'];
+        if ($data instanceof User) {
+            $id = $data->getId();
+        } else {
+            $id = null;
+        }
         
         $builder
             ->add('username', TextType::class)

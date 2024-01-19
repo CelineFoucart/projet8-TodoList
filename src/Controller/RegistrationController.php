@@ -37,10 +37,12 @@ class RegistrationController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $user->setRoles(['ROLE_USER']);
             // encode the plain password
+            /** @var string */
+            $plainPassword = $form->get('plainPassword')->getData();
             $user->setPassword(
                 $userPasswordHasher->hashPassword(
                     $user,
-                    $form->get('plainPassword')->getData()
+                    $plainPassword
                 )
             );
 
@@ -51,17 +53,21 @@ class RegistrationController extends AbstractController
             $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
                 (new TemplatedEmail())
                     ->from(new Address('contact@todolist.com', 'TodoList Mail Bot'))
-                    ->to($user->getEmail())
+                    ->to((string) $user->getEmail())
                     ->subject('Veuillez confirmer votre email')
                     ->htmlTemplate('registration/confirmation_email.html.twig')
             );
             // do anything else you need here, like send an email
 
-            return $userAuthenticator->authenticateUser(
+            $response = $userAuthenticator->authenticateUser(
                 $user,
                 $authenticator,
                 $request
             );
+
+            if ($response === null) {
+                return $this->redirectToRoute('login');
+            }
         }
 
         return $this->render('registration/register.html.twig', [
@@ -76,7 +82,9 @@ class RegistrationController extends AbstractController
 
         // validate email confirmation link, sets User::isVerified=true and persists
         try {
-            $this->emailVerifier->handleEmailConfirmation($request, $this->getUser());
+            /** @var User */
+            $user = $this->getUser();
+            $this->emailVerifier->handleEmailConfirmation($request, $user);
         } catch (VerifyEmailExceptionInterface $exception) {
             $this->addFlash('verify_email_error', $translator->trans($exception->getReason(), [], 'VerifyEmailBundle'));
 

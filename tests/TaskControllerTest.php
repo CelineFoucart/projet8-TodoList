@@ -65,6 +65,12 @@ class TaskControllerTest extends WebTestCase
     {
         /** @var TaskRepository */
         $repository = static::getContainer()->get(TaskRepository::class);
-        return $repository->findOneBy(['title' => $title]);
+        $task = $repository->findOneBy(['title' => $title]);
+
+        if (null === $task) {
+            throw new \Exception('No task named : ' . $title);
+        }
+
+        return $task;
     }
 }

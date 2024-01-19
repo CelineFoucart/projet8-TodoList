@@ -11,6 +11,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 #[IsGranted("ROLE_USER")]
 class ProfileController extends AbstractController
@@ -21,7 +22,7 @@ class ProfileController extends AbstractController
         /** @var User */
         $user = $this->getUser();
 
-        if (null === $user) {
+        if (!$user instanceof UserInterface) {
             throw $this->createAccessDeniedException();
         }
 
@@ -31,7 +32,7 @@ class ProfileController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) { 
             $plainPassword = $form->get('plainPassword')->getData();
             
-            if ($plainPassword !== null) {
+            if (is_string($plainPassword)) {
                 $user->setPassword(
                     $userPasswordHasher->hashPassword(
                         $user,

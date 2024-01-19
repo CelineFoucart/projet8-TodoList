@@ -31,10 +31,12 @@ class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            /** @var string */
+            $plainPassword = $form->get('plainPassword')->getData();
             $user->setPassword(
                 $userPasswordHasher->hashPassword(
                     $user,
-                    $form->get('plainPassword')->getData()
+                    $plainPassword
                 )
             );
 
@@ -58,7 +60,7 @@ class UserController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $plainPassword = $form->get('plainPassword')->getData();
             
-            if ($plainPassword !== null) {
+            if (is_string($plainPassword)) {
                 $user->setPassword(
                     $userPasswordHasher->hashPassword(
                         $user,

@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Task;
+use App\Entity\User;
 use App\Form\TaskType;
 use App\Repository\TaskRepository;
 use App\Security\Voter\TaskVoter;
@@ -25,7 +26,9 @@ class TaskController extends AbstractController
     #[Route(path: '/tasks/create', name: 'task_create', methods:['GET', 'POST'])]
     public function createAction(Request $request, EntityManagerInterface $em): Response
     {
-        $task = (new Task())->setAuthor($this->getUser());
+        /** @var User */
+        $user = $this->getUser();
+        $task = (new Task())->setAuthor($user);
         $form = $this->createForm(TaskType::class, $task);
         $form->handleRequest($request);
 
@@ -68,7 +71,7 @@ class TaskController extends AbstractController
     {
         $this->denyAccessUnlessGranted(TaskVoter::EDIT, $task);
         
-        if ($this->isCsrfTokenValid('toggle'.$task->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('toggle'.$task->getId(), (string) $request->request->get('_token'))) {
             $task->toggle(!$task->isDone());
             $em->persist($task);
             $em->flush();
@@ -86,7 +89,7 @@ class TaskController extends AbstractController
     {
         $this->denyAccessUnlessGranted(TaskVoter::DELETE, $task);
         
-        if ($this->isCsrfTokenValid('delete'.$task->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$task->getId(), (string) $request->request->get('_token'))) {
             $em->remove($task);
             $em->flush();
             $this->addFlash('success', 'La tâche a bien été supprimée.');

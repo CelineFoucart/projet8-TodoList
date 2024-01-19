@@ -39,3 +39,8 @@ php bin/console doctrine:fixtures:load
 ```bash
 php bin/phpunit
 ```
+
+Run phpstan 
+```bash
+vendor/bin/phpstan analyse src tests
+```

@@ -22,7 +22,10 @@ trait FixtureTrait
      */
     protected function makeFixture(): void
     {
-        $this->databaseTool = static::getContainer()->get(DatabaseToolCollection::class)->get();
+        /** @var DatabaseToolCollection */
+        $databaseToolCollection = static::getContainer()->get(DatabaseToolCollection::class);
+
+        $this->databaseTool = $databaseToolCollection->get();
         $this->databaseTool->loadFixtures(
             [AppFixtures::class]
         );
@@ -33,6 +36,11 @@ trait FixtureTrait
         /** @var UserRepository */
         $userRepository = static::getContainer()->get(UserRepository::class);
         $user = $userRepository->findOneBy(['email' => $email]);
+
+        if (null === $user) {
+            throw new \Exception("User " . $email . "does not exist!");
+        }
+
         $client->loginUser($user);
 
         return $user;

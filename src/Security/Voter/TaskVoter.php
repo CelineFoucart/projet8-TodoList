@@ -9,6 +9,9 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
+/**
+ * @extends Voter<'EDIT'|'DELETE',Task>
+ */
 class TaskVoter extends Voter
 {
     public const EDIT = 'EDIT';
@@ -31,7 +34,7 @@ class TaskVoter extends Voter
     {
         $user = $token->getUser();
         // if the user is anonymous, do not grant access
-        if (!$user instanceof UserInterface) {
+        if (!$user instanceof User) {
             return false;
         }
 
@@ -43,13 +46,9 @@ class TaskVoter extends Voter
         switch ($attribute) {
             case self::EDIT:
                 return $this->canEdit($user, $subject);
-                break;
             case self::DELETE:
                 return $this->canDelete($user, $subject);
-                break;
         }
-
-        return false;
     }
 
     private function canEdit(User $user, Task $task): bool

@@ -25,6 +25,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\Email(message:"Le format de l'adresse n'est pas correcte.")]
     private ?string $email = null;
 
+    /**
+     * @var string[]
+     */
     #[ORM\Column]
     private array $roles = [];
 
@@ -39,8 +42,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $username = null;
 
     #[ORM\Column(type: 'boolean')]
-    private $isVerified = false;
-
+    private ?bool $isVerified = false;
+    
     #[ORM\OneToMany(mappedBy: 'author', targetEntity: Task::class)]
     private Collection $tasks;
 
@@ -78,6 +81,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @see UserInterface
+     * 
+     * @return string[]
      */
     public function getRoles(): array
     {
@@ -88,6 +93,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return array_unique($roles);
     }
 
+    /**
+     * @param string[] $roles
+     * 
+     * @return static
+     */
     public function setRoles(array $roles): static
     {
         $this->roles = $roles;
@@ -98,7 +108,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @see PasswordAuthenticatedUserInterface
      */
-    public function getPassword(): string
+    public function getPassword(): ?string
     {
         return $this->password;
     }
@@ -133,7 +143,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function isVerified(): bool
     {
-        return $this->isVerified;
+        return (bool) $this->isVerified;
     }
 
     public function setIsVerified(bool $isVerified): static

@@ -39,6 +39,15 @@ class AppFixtures extends Fixture
         $manager->flush();
     }
 
+    /**
+     * Generate a user.
+     * 
+     * @param string $username
+     * @param string $email
+     * @param string[] $roles
+     * 
+     * @return User
+     */
     private function getUser(string $username, string $email, array $roles = ['ROLE_USER']): User
     {
         $user = (new User())

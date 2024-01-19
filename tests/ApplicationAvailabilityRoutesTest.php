@@ -10,7 +10,7 @@ class ApplicationAvailabilityRoutesTest extends WebTestCase
     /**
      * @dataProvider urlPublicProvider
      */
-    public function testPageIsAccessedByAnonymous($url)
+    public function testPageIsAccessedByAnonymous(string $url): void
     {
         $client = self::createClient();
         $client->request('GET', $url);
@@ -21,14 +21,14 @@ class ApplicationAvailabilityRoutesTest extends WebTestCase
     /**
      * @dataProvider urlProtectedProvider
      */
-    public function testPageIsNotAccessedByAnonymous($url)
+    public function testPageIsNotAccessedByAnonymous(string $url): void
     {
         $client = self::createClient();
         $client->request('GET', $url);
         $this->assertSame(Response::HTTP_FOUND, $client->getResponse()->getStatusCode());
     }
 
-    public function urlPublicProvider()
+    public function urlPublicProvider(): \Generator
     {
         yield ['/'];
         yield ['/login'];
@@ -37,7 +37,7 @@ class ApplicationAvailabilityRoutesTest extends WebTestCase
         
     }
 
-    public function urlProtectedProvider()
+    public function urlProtectedProvider(): \Generator
     {
         yield ['/tasks'];
         yield ['/tasks/create'];
