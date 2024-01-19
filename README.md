@@ -40,7 +40,14 @@ php bin/console doctrine:fixtures:load
 php bin/phpunit
 ```
 
-Run phpstan 
+Run phpstan
+
 ```bash
 vendor/bin/phpstan analyse src tests
+```
+
+Run PhpMetrics
+
+```bash
+phpmetrics --report-html="./var/report/" ./src
 ```
