@@ -39,7 +39,7 @@ trait FixtureTrait
         $user = $userRepository->findOneBy(['email' => $email]);
 
         if (null === $user) {
-            throw new \Exception('User '.$email.'does not exist!');
+            throw new \Exception('This user does not exist!');
         }
 
         $client->loginUser($user);

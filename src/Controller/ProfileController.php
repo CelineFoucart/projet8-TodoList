@@ -19,7 +19,9 @@ class ProfileController extends AbstractController
     #[Route('/profile', name: 'app_profile')]
     public function index(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
     {
-        /** @var User */
+        /** 
+         * @var User 
+         */
         $user = $this->getUser();
 
         if (!$user instanceof UserInterface) {

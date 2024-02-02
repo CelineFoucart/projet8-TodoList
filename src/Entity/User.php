@@ -15,18 +15,24 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[UniqueEntity(fields: ['email', 'username'])]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
+    /**
+     * @var int|null the entity id
+     */
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
+    /**
+     * @var string|null the user email
+     */
     #[ORM\Column(length: 180, unique: true)]
     #[Assert\NotBlank(message: 'Vous devez saisir une adresse email.')]
     #[Assert\Email(message: "Le format de l'adresse n'est pas correcte.")]
     private ?string $email = null;
 
     /**
-     * @var string[]
+     * @var string[] The user roles
      */
     #[ORM\Column]
     private array $roles = [];
@@ -37,13 +43,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
+    /**
+     * @var string|null the user name
+     */
     #[ORM\Column(length: 25)]
     #[Assert\NotBlank(message: "Vous devez saisir un nom d'utilisateur.")]
     private ?string $username = null;
 
+    /**
+     * @var bool|null if the user email is verified
+     */
     #[ORM\Column(type: 'boolean')]
     private ?bool $isVerified = false;
 
+    /**
+     * @var Collection<int, Task> the user tasks
+     */
     #[ORM\OneToMany(mappedBy: 'author', targetEntity: Task::class)]
     private Collection $tasks;
 

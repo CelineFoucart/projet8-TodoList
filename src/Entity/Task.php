@@ -10,25 +10,43 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: TaskRepository::class)]
 class Task
 {
+    /**
+     * @var int|null the entity id
+     */
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
+    /**
+     * @var \DateTimeInterface|null The creation date
+     */
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $createdAt = null;
 
+    /**
+     * @var string|null the task title
+     */
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message: 'Vous devez saisir un titre.')]
     private ?string $title = null;
 
+    /**
+     * @var string|null the task content
+     */
     #[ORM\Column(type: Types::TEXT)]
     #[Assert\NotBlank(message: 'Vous devez saisir du contenu.')]
     private ?string $content = null;
 
+    /**
+     * @var bool|null if the task is done
+     */
     #[ORM\Column]
     private ?bool $done = null;
 
+    /**
+     * @var User|null the task author
+     */
     #[ORM\ManyToOne(inversedBy: 'tasks')]
     private ?User $author = null;
 
