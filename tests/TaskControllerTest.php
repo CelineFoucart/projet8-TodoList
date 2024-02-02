@@ -60,7 +60,7 @@ class TaskControllerTest extends WebTestCase
         $task = $repository->findOneBy(['title' => $title]);
 
         if (null === $task) {
-            throw new \Exception('No task named : '.$title);
+            throw new \Exception('No task named');
         }
 
         return $task;
