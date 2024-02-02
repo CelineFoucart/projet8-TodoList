@@ -5,13 +5,13 @@ namespace App\Form;
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Validator\Constraints\Length;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Validator\Constraints\Length;
 
 class UserType extends AbstractType
 {
@@ -23,7 +23,7 @@ class UserType extends AbstractType
         } else {
             $id = null;
         }
-        
+
         $builder
             ->add('username', TextType::class)
             ->add('email', EmailType::class)
@@ -44,7 +44,7 @@ class UserType extends AbstractType
                     'ROLE_USER' => 'ROLE_USER',
                 ],
                 'required' => true,
-                'multiple' => true
+                'multiple' => true,
             ])
             ->add('isVerified', CheckboxType::class, ['required' => false])
         ;

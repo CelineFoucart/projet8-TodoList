@@ -65,7 +65,7 @@ class RegistrationController extends AbstractController
                 $request
             );
 
-            if ($response === null) {
+            if (null === $response) {
                 return $this->redirectToRoute('login');
             }
         }

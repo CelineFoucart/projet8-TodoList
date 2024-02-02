@@ -34,7 +34,6 @@ class ApplicationAvailabilityRoutesTest extends WebTestCase
         yield ['/login'];
         yield ['/register'];
         yield ['/terms'];
-        
     }
 
     public function urlProtectedProvider(): \Generator

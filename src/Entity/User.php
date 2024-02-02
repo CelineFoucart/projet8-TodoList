@@ -6,13 +6,13 @@ use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-#[UniqueEntity(fields:['email', 'username'])]
+#[UniqueEntity(fields: ['email', 'username'])]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -21,8 +21,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
-    #[Assert\NotBlank(message:"Vous devez saisir une adresse email.")]
-    #[Assert\Email(message:"Le format de l'adresse n'est pas correcte.")]
+    #[Assert\NotBlank(message: 'Vous devez saisir une adresse email.')]
+    #[Assert\Email(message: "Le format de l'adresse n'est pas correcte.")]
     private ?string $email = null;
 
     /**
@@ -38,12 +38,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     #[ORM\Column(length: 25)]
-    #[Assert\NotBlank(message:"Vous devez saisir un nom d'utilisateur.")]
+    #[Assert\NotBlank(message: "Vous devez saisir un nom d'utilisateur.")]
     private ?string $username = null;
 
     #[ORM\Column(type: 'boolean')]
     private ?bool $isVerified = false;
-    
+
     #[ORM\OneToMany(mappedBy: 'author', targetEntity: Task::class)]
     private Collection $tasks;
 
@@ -81,7 +81,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @see UserInterface
-     * 
+     *
      * @return string[]
      */
     public function getRoles(): array
@@ -95,8 +95,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @param string[] $roles
-     * 
-     * @return static
      */
     public function setRoles(array $roles): static
     {

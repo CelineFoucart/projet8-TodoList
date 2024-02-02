@@ -4,21 +4,19 @@ declare(strict_types=1);
 
 namespace App\Tests;
 
-use App\Entity\User;
 use App\DataFixtures\AppFixtures;
+use App\Entity\User;
 use App\Repository\UserRepository;
-use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
 use Liip\TestFixturesBundle\Services\DatabaseTools\AbstractDatabaseTool;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 
 trait FixtureTrait
 {
     protected AbstractDatabaseTool $databaseTool;
 
     /**
-     * Hydrates the test database
-     * 
-     * @return void
+     * Hydrates the test database.
      */
     protected function makeFixture(): void
     {
@@ -31,6 +29,9 @@ trait FixtureTrait
         );
     }
 
+    /**
+     * Logs in a user.
+     */
     protected function loginUser(KernelBrowser $client, string $email): User
     {
         /** @var UserRepository */
@@ -38,7 +39,7 @@ trait FixtureTrait
         $user = $userRepository->findOneBy(['email' => $email]);
 
         if (null === $user) {
-            throw new \Exception("User " . $email . "does not exist!");
+            throw new \Exception('User '.$email.'does not exist!');
         }
 
         $client->loginUser($user);

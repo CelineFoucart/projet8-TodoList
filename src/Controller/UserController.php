@@ -6,14 +6,14 @@ use App\Entity\User;
 use App\Form\UserType;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[IsGranted("ROLE_ADMIN")]
+#[IsGranted('ROLE_ADMIN')]
 class UserController extends AbstractController
 {
     #[Route(path: '/users', name: 'user_list')]
@@ -21,7 +21,7 @@ class UserController extends AbstractController
     {
         return $this->render('user/list.html.twig', ['users' => $userRepository->findAll()]);
     }
-    
+
     #[Route(path: '/users/create', name: 'user_create')]
     public function createAction(Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $userPasswordHasher): Response
     {
@@ -50,7 +50,7 @@ class UserController extends AbstractController
 
         return $this->render('user/create.html.twig', ['form' => $form]);
     }
-    
+
     #[Route(path: '/users/{id}/edit', name: 'user_edit')]
     public function editAction(User $user, Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $userPasswordHasher): Response
     {
@@ -59,7 +59,7 @@ class UserController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $plainPassword = $form->get('plainPassword')->getData();
-            
+
             if (is_string($plainPassword)) {
                 $user->setPassword(
                     $userPasswordHasher->hashPassword(

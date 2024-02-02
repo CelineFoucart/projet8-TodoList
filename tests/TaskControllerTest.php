@@ -19,15 +19,10 @@ class TaskControllerTest extends WebTestCase
 
     public function testIndexAsLoggedIn(): void
     {
-        // Etant donné que je suis sur le site conne authentifié
         $client = static::createClient();
         $this->makeFixture();
         $this->loginUser($client, 'johndoe@gmail.com');
-        
-        // Quand je décide d'afficher la liste des tâches
-        $crawler = $client->request('GET', '/tasks');
-
-        // Alors je vois la liste des tâches
+        $client->request('GET', '/tasks');
         $this->assertSelectorTextContains('h2', 'Liste des tâches');
         $this->assertSelectorTextContains('h4 a', 'Task number 0');
     }
@@ -44,9 +39,7 @@ class TaskControllerTest extends WebTestCase
         $client = static::createClient();
         $this->makeFixture();
         $this->loginUser($client, 'johndoe@gmail.com');
-
         $client->request('GET', '/tasks/create');
-
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
     }
 
@@ -54,9 +47,8 @@ class TaskControllerTest extends WebTestCase
     {
         $client = static::createClient();
         $this->makeFixture();
-
         $task = $this->getTask('Task number 0');
-        $client->request('GET', '/tasks/'. $task->getId() .'/edit');
+        $client->request('GET', '/tasks/'.$task->getId().'/edit');
 
         $this->assertResponseRedirects('/login');
     }
@@ -68,7 +60,7 @@ class TaskControllerTest extends WebTestCase
         $task = $repository->findOneBy(['title' => $title]);
 
         if (null === $task) {
-            throw new \Exception('No task named : ' . $title);
+            throw new \Exception('No task named : '.$title);
         }
 
         return $task;
