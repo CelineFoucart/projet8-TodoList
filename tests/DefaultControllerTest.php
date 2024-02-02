@@ -23,15 +23,12 @@ class DefaultControllerTest extends WebTestCase
 
     public function testHomePageAsLoggedIn(): void
     {
-        // Given
         $client = static::createClient();
         $this->makeFixture();
         $this->loginUser($client, 'johndoe@gmail.com');
-
-        // When
+        
         $client->request('GET', '/');
-
-        // Then
+        
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
         $this->assertSelectorTextContains('.btn-success', 'Créer une nouvelle tâche');
         $this->assertSelectorTextContains('.btn-info', 'Consulter la liste des tâches à faire');

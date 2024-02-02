@@ -13,6 +13,9 @@ use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 
 trait FixtureTrait
 {
+    /**
+     * Used to hydrate the database with test data.
+     */
     protected AbstractDatabaseTool $databaseTool;
 
     /**
@@ -34,7 +37,6 @@ trait FixtureTrait
      */
     protected function loginUser(KernelBrowser $client, string $email): User
     {
-        /** @var UserRepository */
         $userRepository = static::getContainer()->get(UserRepository::class);
         $user = $userRepository->findOneBy(['email' => $email]);
 
