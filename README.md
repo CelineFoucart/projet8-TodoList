@@ -38,6 +38,7 @@ php bin/console doctrine:fixtures:load
 
 ```bash
 php bin/phpunit
+php bin/phpunit --coverage-html var/html
 ```
 
 Run phpstan
