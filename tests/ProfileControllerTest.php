@@ -102,5 +102,17 @@ class ProfileControllerTest extends WebTestCase
         $this->assertTrue($paswordHasher->isPasswordValid($user, 'passwordedited123'));
     }
 
-    
+    public function testSubmitInvalidPassword(): void
+    {
+        $client = static::createClient();
+        $this->makeFixture();
+        $this->loginUser($client, 'johndoe@gmail.com');
+
+        $client->request('GET', '/profile');
+        $client->submitForm('Enregistrer', [
+            'profile[plainPassword][first]' => 'passwordedited123',
+            'profile[plainPassword][second]' => 'passworded',
+        ]);
+        $this->assertSelectorExists('.invalid-feedback');
+    }
 }
