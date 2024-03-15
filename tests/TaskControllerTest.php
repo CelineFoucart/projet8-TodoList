@@ -49,8 +49,17 @@ class TaskControllerTest extends WebTestCase
         $this->makeFixture();
         $task = $this->getTask('Task number 0');
         $client->request('GET', '/tasks/'.$task->getId().'/edit');
-
         $this->assertResponseRedirects('/login');
+    }
+
+    public function testEditAsLoggin(): void
+    {
+        $client = static::createClient();
+        $this->makeFixture();
+        $task = $this->getTask('Task number 0');
+        $this->loginUser($client, 'johndoe@gmail.com');
+        $client->request('GET', '/tasks/'.$task->getId().'/edit');
+        $this->assertEquals(200, $client->getResponse()->getStatusCode());
     }
 
     protected function getTask(string $title): Task
