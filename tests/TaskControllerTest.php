@@ -43,6 +43,39 @@ class TaskControllerTest extends WebTestCase
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
     }
 
+    public function testCreateWithValidData(): void
+    {
+        $client = static::createClient();
+        $this->makeFixture();
+        $this->loginUser($client, 'johndoe@gmail.com');
+        $client->request('GET', '/tasks/create');
+
+        $client->submitForm('Ajouter', [
+            'task[title]' => 'Lorem ipsum',
+            'task[content]' => 'Lorem ipsum sit amet',
+        ]);
+        $client->followRedirect();
+
+        $repository = static::getContainer()->get(TaskRepository::class);
+        $task = $repository->findOneBy(['title' => 'Lorem ipsum']);
+        
+        $this->assertNotNull($task);
+    }
+
+    public function testCreateWithInvalidData(): void
+    {
+        $client = static::createClient();
+        $this->makeFixture();
+        $this->loginUser($client, 'johndoe@gmail.com');
+        $client->request('GET', '/tasks/create');
+
+        $client->submitForm('Ajouter', [
+            'task[title]' => '',
+            'task[content]' => 'Lorem ipsum sit amet',
+        ]);
+        $this->assertSelectorExists('.invalid-feedback');
+    }
+
     public function testEditAsAnonymous(): void
     {
         $client = static::createClient();
@@ -60,6 +93,39 @@ class TaskControllerTest extends WebTestCase
         $this->loginUser($client, 'johndoe@gmail.com');
         $client->request('GET', '/tasks/'.$task->getId().'/edit');
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
+    }
+
+    public function testEditWithValidData(): void
+    {
+        $client = static::createClient();
+        $this->makeFixture();
+        $task = $this->getTask('Task number 0');
+        $this->loginUser($client, 'johndoe@gmail.com');
+        $client->request('GET', '/tasks/'.$task->getId().'/edit');
+        $client->submitForm('Modifier', [
+            'task[title]' => 'Task number 0 Edit',
+            'task[content]' => 'Lorem ipsum sit amet',
+        ]);
+        $client->followRedirect();
+
+        $repository = static::getContainer()->get(TaskRepository::class);
+        $task = $repository->findOneBy(['title' => 'Task number 0 Edit']);
+
+        $this->assertNotNull($task);
+    }
+
+    public function testEditWithInvalidData(): void
+    {
+        $client = static::createClient();
+        $this->makeFixture();
+        $task = $this->getTask('Task number 0');
+        $this->loginUser($client, 'johndoe@gmail.com');
+        $client->request('GET', '/tasks/'.$task->getId().'/edit');
+        $client->submitForm('Modifier', [
+            'task[title]' => 'Task number 0 Edit',
+            'task[content]' => '',
+        ]);
+        $this->assertSelectorExists('.invalid-feedback');
     }
 
     protected function getTask(string $title): Task
