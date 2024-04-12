@@ -35,6 +35,52 @@ class UserControllerTest extends WebTestCase
         $this->assertSelectorTextContains('h2', 'Liste des utilisateurs');
     }
 
+    public function testCreateAsAnonymous(): void
+    {
+        $client = static::createClient();
+        $client->request('GET', '/users/create');
+        $this->assertResponseRedirects('/login');
+    }
+
+    public function testCreateWithAccessDenied(): void
+    {
+        $client = static::createClient();
+        $this->makeFixture();
+        $this->loginUser($client, 'johndoe@gmail.com');
+        $client->request('GET', '/users/create');
+        $this->assertEquals(403, $client->getResponse()->getStatusCode());
+    }
+
+    public function testCreateAsAdmin(): void
+    {
+        $client = static::createClient();
+        $this->makeFixture();
+        $this->loginUser($client, 'admin@gmail.com');
+        $client->request('GET', '/users/create');
+        $this->assertSelectorTextContains('h2', 'Créer un utilisateur');
+    }
+
+    public function testCreateAsAdminWithValidData(): void
+    {
+        $client = static::createClient();
+        $this->makeFixture();
+        $this->loginUser($client, 'admin@gmail.com');
+        $client->request('GET', '/users/create');
+        $client->submitForm('Ajouter', [
+            'user[username]' => 'UserTest',
+            'user[email]' => 'test@domaine.fr',
+            'user[plainPassword][first]' => 'password123',
+            'user[plainPassword][second]' => 'password123',
+            'user[roles]' => ['ROLE_ADMIN'],
+            'user[isVerified]' => true
+        ]);
+
+        $repository = static::getContainer()->get(UserRepository::class);
+        $user = $repository->findOneBy(['username' => 'UserTest']);
+
+        $this->assertNotNull($user);
+    }
+
     public function testEditAsAdmin(): void
     {
         $client = static::createClient();
@@ -45,6 +91,8 @@ class UserControllerTest extends WebTestCase
         $client->request('GET', '/users/' . $user->getId() . '/edit');
         $this->assertSelectorTextContains('h2', 'Modifier le compte '.$user->getUsername());
     }
+
+
 
     protected function getUser(string $email): User
     {
