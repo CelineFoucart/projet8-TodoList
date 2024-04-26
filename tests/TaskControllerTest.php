@@ -5,6 +5,7 @@ namespace App\Tests;
 use App\Entity\Task;
 use App\Repository\TaskRepository;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\HttpFoundation\Response;
 
 class TaskControllerTest extends WebTestCase
 {
@@ -107,10 +108,8 @@ class TaskControllerTest extends WebTestCase
             'task[content]' => 'Lorem ipsum sit amet',
         ]);
         $client->followRedirect();
-
-        $repository = static::getContainer()->get(TaskRepository::class);
-        $task = $repository->findOneBy(['title' => 'Task number 0 Edit']);
-
+        
+        $task = $this->getTask('Task number 0 Edit');
         $this->assertNotNull($task);
     }
 
@@ -128,15 +127,79 @@ class TaskControllerTest extends WebTestCase
         $this->assertSelectorExists('.invalid-feedback');
     }
 
-    protected function getTask(string $title): Task
+    public function testToggleWithValidTask(): void
+    {
+        $client = static::createClient();
+        $this->makeFixture();
+        $this->loginUser($client, 'johndoe@gmail.com');
+        $task = $this->getTask('Task number 0');
+        $currentToggle = $task->isDone();
+
+        $client->request('POST', '/tasks/'.$task->getId().'/toggle');
+        static::assertSame(302, $client->getResponse()->getStatusCode());
+        
+        $task = $this->getTask('Task number 0');
+        $this->assertNotEquals($currentToggle, $task->isDone());
+    }
+
+    public function testToggleWithNotFoundTask(): void
+    {
+        $client = static::createClient();
+        $this->makeFixture();
+        $this->loginUser($client, 'johndoe@gmail.com');
+
+        $client->request('POST', '/tasks/44444444/toggle');
+        static::assertSame(404, $client->getResponse()->getStatusCode());
+    }
+    
+    public function testToggleAnonymousTaskAsNotAdmin(): void
+    {
+        $client = static::createClient();
+        $this->makeFixture();
+        $this->loginUser($client, 'johndoe@gmail.com');
+        $task = $this->getTask('Task Anonymous');
+        $currentToggle = $task->isDone();
+
+        $client->request('POST', '/tasks/'.$task->getId().'/toggle');
+        static::assertSame(403, $client->getResponse()->getStatusCode());
+        
+        $task = $this->getTask('Task Anonymous');
+        $this->assertEquals($currentToggle, $task->isDone());
+    }
+
+    public function testDeleteTask(): void
+    {
+        $client = static::createClient();
+        $this->makeFixture();
+        $this->loginUser($client, 'johndoe@gmail.com');
+        $task = $this->getTask('Task number 0');
+
+        $client->request('POST', '/tasks/'.$task->getId().'/delete');
+        static::assertSame(302, $client->getResponse()->getStatusCode());
+        
+        $task = $this->getTask('Task number 0');
+        $this->assertNull($task);
+    }
+
+    public function testDeleteTaskAnonymousAsNotAdmin(): void
+    {
+        $client = static::createClient();
+        $this->makeFixture();
+        $this->loginUser($client, 'johndoe@gmail.com');
+        $task = $this->getTask('Task Anonymous');
+
+        $client->request('POST', '/tasks/'.$task->getId().'/delete');
+        static::assertSame(403, $client->getResponse()->getStatusCode());
+        
+        $task = $this->getTask('Task Anonymous');
+        $this->assertNotNull($task);
+    }
+
+    protected function getTask(string $title): ?Task
     {
         /** @var TaskRepository */
         $repository = static::getContainer()->get(TaskRepository::class);
         $task = $repository->findOneBy(['title' => $title]);
-
-        if (null === $task) {
-            throw new \Exception('No task named');
-        }
 
         return $task;
     }

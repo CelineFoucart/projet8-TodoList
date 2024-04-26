@@ -69,17 +69,12 @@ class TaskController extends AbstractController
     }
 
     #[Route(path: '/tasks/{id}/toggle', name: 'task_toggle', methods: ['POST'])]
-    public function toggleTaskAction(Task $task, EntityManagerInterface $em, Request $request): Response
+    public function toggleTaskAction(Task $task, EntityManagerInterface $em): Response
     {
         $this->denyAccessUnlessGranted(TaskVoter::EDIT, $task);
-
-        if ($this->isCsrfTokenValid('toggle'.$task->getId(), (string) $request->request->get('_token'))) {
-            $task->toggle(!$task->isDone());
-            $em->persist($task);
-            $em->flush();
-        } else {
-            $this->addFlash('error', 'Token CSRF invalide.');
-        }
+        $task->toggle(!$task->isDone());
+        $em->persist($task);
+        $em->flush();
 
         $this->addFlash('success', sprintf('La tâche %s a bien été marquée comme faite.', $task->getTitle()));
 
@@ -87,17 +82,12 @@ class TaskController extends AbstractController
     }
 
     #[Route(path: '/tasks/{id}/delete', name: 'task_delete', methods: ['POST'])]
-    public function deleteTaskAction(Task $task, EntityManagerInterface $em, Request $request): Response
+    public function deleteTaskAction(Task $task, EntityManagerInterface $em): Response
     {
         $this->denyAccessUnlessGranted(TaskVoter::DELETE, $task);
-
-        if ($this->isCsrfTokenValid('delete'.$task->getId(), (string) $request->request->get('_token'))) {
-            $em->remove($task);
-            $em->flush();
-            $this->addFlash('success', 'La tâche a bien été supprimée.');
-        } else {
-            $this->addFlash('error', 'Token CSRF invalide.');
-        }
+        $em->remove($task);
+        $em->flush();
+        $this->addFlash('success', 'La tâche a bien été supprimée.');
 
         return $this->redirectToRoute('task_list');
     }
