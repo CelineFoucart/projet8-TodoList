@@ -18,11 +18,8 @@ class UserType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $data = $options['data'];
-        if ($data instanceof User) {
-            $id = $data->getId();
-        } else {
-            $id = null;
-        }
+        assert($data instanceof User);
+        $id = $data->getId();
 
         $builder
             ->add('username', TextType::class)
