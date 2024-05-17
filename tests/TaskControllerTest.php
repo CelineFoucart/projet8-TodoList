@@ -142,6 +142,35 @@ class TaskControllerTest extends WebTestCase
         $this->assertNotEquals($currentToggle, $task->isDone());
     }
 
+    public function testToggleWithValidTaskAsAdmin(): void
+    {
+        $client = static::createClient();
+        $this->makeFixture();
+        $this->loginUser($client, 'johndoe@gmail.com');
+        $task = $this->getTask('Task number 0');
+        $currentToggle = $task->isDone();
+
+        $client->request('POST', '/tasks/'.$task->getId().'/toggle');
+        static::assertSame(302, $client->getResponse()->getStatusCode());
+        
+        $task = $this->getTask('Task number 0');
+        $this->assertNotEquals($currentToggle, $task->isDone());
+    }
+
+    public function testToggleWithAnonymousUser(): void
+    {
+        $client = static::createClient();
+        $this->makeFixture();
+        $this->loginUser($client, 'admin@gmail.com');
+        $task = $this->getTask('Task number 0');
+        $currentToggle = $task->isDone();
+
+        $client->request('POST', '/tasks/'.$task->getId().'/toggle');
+        static::assertSame(302, $client->getResponse()->getStatusCode());
+
+        $this->assertNotEquals($currentToggle, $task->isDone());
+    }
+
     public function testToggleWithNotFoundTask(): void
     {
         $client = static::createClient();

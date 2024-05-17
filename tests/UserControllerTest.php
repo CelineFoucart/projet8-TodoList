@@ -92,7 +92,30 @@ class UserControllerTest extends WebTestCase
         $this->assertSelectorTextContains('h2', 'Modifier le compte '.$user->getUsername());
     }
 
+    public function testEditAsAdminWithValidData(): void
+    {
+        $client = static::createClient();
+        $this->makeFixture();
+        $this->loginUser($client, 'admin@gmail.com');
 
+        $user = $this->getUser('johndoe@gmail.com');
+        $client->request('GET', '/users/' . $user->getId() . '/edit');
+
+        $client->submitForm('Modifier', [
+            'user[username]' => 'John Doe Edited',
+            'user[email]' => 'johndoe@gmail.com',
+            'user[plainPassword][first]' => 'password123',
+            'user[plainPassword][second]' => 'password123',
+            'user[roles]' => ['ROLE_USER'],
+            'user[isVerified]' => true
+        ]);
+
+        $repository = static::getContainer()->get(UserRepository::class);
+        /** @var User */
+        $afterEdition = $repository->find($user->getId());
+        $this->assertEquals('John Doe Edited', $afterEdition->getUsername());
+        $this->assertEquals('johndoe@gmail.com', $afterEdition->getEmail());
+    }
 
     protected function getUser(string $email): User
     {
