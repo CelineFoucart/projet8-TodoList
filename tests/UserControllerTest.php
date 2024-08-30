@@ -111,7 +111,9 @@ class UserControllerTest extends WebTestCase
         ]);
 
         $repository = static::getContainer()->get(UserRepository::class);
-        /** @var User */
+        /** 
+         * @var User 
+         */
         $afterEdition = $repository->find($user->getId());
         $this->assertEquals('John Doe Edited', $afterEdition->getUsername());
         $this->assertEquals('johndoe@gmail.com', $afterEdition->getEmail());
@@ -119,7 +121,9 @@ class UserControllerTest extends WebTestCase
 
     protected function getUser(string $email): User
     {
-        /** @var UserRepository */
+        /** 
+         * @var UserRepository 
+         */
         $repository = static::getContainer()->get(UserRepository::class);
         $task = $repository->findOneBy(['email' => $email]);
 

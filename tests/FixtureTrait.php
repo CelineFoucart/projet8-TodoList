@@ -14,7 +14,7 @@ use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 trait FixtureTrait
 {
     /**
-     * Used to hydrate the database with test data.
+     * @var AbstractDatabaseTool Used to hydrate the database with test data.
      */
     protected AbstractDatabaseTool $databaseTool;
 
@@ -23,7 +23,9 @@ trait FixtureTrait
      */
     protected function makeFixture(): void
     {
-        /** @var DatabaseToolCollection */
+        /** 
+         * @var DatabaseToolCollection 
+         */
         $databaseToolCollection = static::getContainer()->get(DatabaseToolCollection::class);
 
         $this->databaseTool = $databaseToolCollection->get();

@@ -225,7 +225,9 @@ class TaskControllerTest extends WebTestCase
 
     protected function getTask(string $title): ?Task
     {
-        /** @var TaskRepository */
+        /** 
+         * @var TaskRepository 
+         */
         $repository = static::getContainer()->get(TaskRepository::class);
         $task = $repository->findOneBy(['title' => $title]);
 
