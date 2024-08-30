@@ -11,7 +11,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Task
 {
     /**
-     * @var integer|null the entity id
+     * @var int|null the entity id
      */
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -39,7 +39,7 @@ class Task
     private ?string $content = null;
 
     /**
-     * @var boolean|null if the task is done
+     * @var bool|null if the task is done
      */
     #[ORM\Column]
     private ?bool $done = null;

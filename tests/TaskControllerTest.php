@@ -5,7 +5,6 @@ namespace App\Tests;
 use App\Entity\Task;
 use App\Repository\TaskRepository;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Component\HttpFoundation\Response;
 
 class TaskControllerTest extends WebTestCase
 {
@@ -59,7 +58,7 @@ class TaskControllerTest extends WebTestCase
 
         $repository = static::getContainer()->get(TaskRepository::class);
         $task = $repository->findOneBy(['title' => 'Lorem ipsum']);
-        
+
         $this->assertNotNull($task);
     }
 
@@ -108,7 +107,7 @@ class TaskControllerTest extends WebTestCase
             'task[content]' => 'Lorem ipsum sit amet',
         ]);
         $client->followRedirect();
-        
+
         $task = $this->getTask('Task number 0 Edit');
         $this->assertNotNull($task);
     }
@@ -137,7 +136,7 @@ class TaskControllerTest extends WebTestCase
 
         $client->request('POST', '/tasks/'.$task->getId().'/toggle');
         static::assertSame(302, $client->getResponse()->getStatusCode());
-        
+
         $task = $this->getTask('Task number 0');
         $this->assertNotEquals($currentToggle, $task->isDone());
     }
@@ -152,7 +151,7 @@ class TaskControllerTest extends WebTestCase
 
         $client->request('POST', '/tasks/'.$task->getId().'/toggle');
         static::assertSame(302, $client->getResponse()->getStatusCode());
-        
+
         $task = $this->getTask('Task number 0');
         $this->assertNotEquals($currentToggle, $task->isDone());
     }
@@ -180,7 +179,7 @@ class TaskControllerTest extends WebTestCase
         $client->request('POST', '/tasks/44444444/toggle');
         static::assertSame(404, $client->getResponse()->getStatusCode());
     }
-    
+
     public function testToggleAnonymousTaskAsNotAdmin(): void
     {
         $client = static::createClient();
@@ -191,7 +190,7 @@ class TaskControllerTest extends WebTestCase
 
         $client->request('POST', '/tasks/'.$task->getId().'/toggle');
         static::assertSame(403, $client->getResponse()->getStatusCode());
-        
+
         $task = $this->getTask('Task Anonymous');
         $this->assertEquals($currentToggle, $task->isDone());
     }
@@ -205,7 +204,7 @@ class TaskControllerTest extends WebTestCase
 
         $client->request('POST', '/tasks/'.$task->getId().'/delete');
         static::assertSame(302, $client->getResponse()->getStatusCode());
-        
+
         $task = $this->getTask('Task number 0');
         $this->assertNull($task);
     }
@@ -219,7 +218,7 @@ class TaskControllerTest extends WebTestCase
 
         $client->request('POST', '/tasks/'.$task->getId().'/delete');
         static::assertSame(403, $client->getResponse()->getStatusCode());
-        
+
         $task = $this->getTask('Task Anonymous');
         $this->assertNotNull($task);
     }

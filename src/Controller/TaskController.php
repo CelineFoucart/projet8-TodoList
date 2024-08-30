@@ -26,8 +26,8 @@ class TaskController extends AbstractController
     #[Route(path: '/tasks/create', name: 'task_create', methods: ['GET', 'POST'])]
     public function createAction(Request $request, EntityManagerInterface $em): Response
     {
-        /** 
-         * @var User 
+        /**
+         * @var User
          */
         $user = $this->getUser();
         $task = (new Task())->setAuthor($user);

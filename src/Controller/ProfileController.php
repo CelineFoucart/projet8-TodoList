@@ -18,8 +18,8 @@ class ProfileController extends AbstractController
     #[Route('/profile', name: 'app_profile')]
     public function index(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
     {
-        /** 
-         * @var User 
+        /**
+         * @var User
          */
         $user = $this->getUser();
         $form = $this->createForm(ProfileType::class, $user);
@@ -29,7 +29,7 @@ class ProfileController extends AbstractController
             $plainPassword = $form->get('plainPassword')->getData();
 
             if (is_string($plainPassword)) {
-                $user->setPassword($userPasswordHasher->hashPassword( $user, $plainPassword));
+                $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
             }
 
             $entityManager->persist($user);

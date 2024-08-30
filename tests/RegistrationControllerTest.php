@@ -31,7 +31,7 @@ class RegistrationControllerTest extends WebTestCase
             'registration_form[plainPassword][second]' => 'passwordedited123',
             'registration_form[agreeTerms]' => true,
         ]);
-        
+
         $this->assertSelectorExists('.invalid-feedback');
     }
 
@@ -48,7 +48,7 @@ class RegistrationControllerTest extends WebTestCase
             'registration_form[plainPassword][second]' => 'passwordedited123',
             'registration_form[agreeTerms]' => true,
         ]);
-        
+
         $this->assertSelectorExists('.invalid-feedback');
     }
 
@@ -65,7 +65,7 @@ class RegistrationControllerTest extends WebTestCase
             'registration_form[plainPassword][second]' => 'password',
             'registration_form[agreeTerms]' => true,
         ]);
-        
+
         $this->assertSelectorExists('.invalid-feedback');
     }
 

@@ -72,7 +72,7 @@ class UserControllerTest extends WebTestCase
             'user[plainPassword][first]' => 'password123',
             'user[plainPassword][second]' => 'password123',
             'user[roles]' => ['ROLE_ADMIN'],
-            'user[isVerified]' => true
+            'user[isVerified]' => true,
         ]);
 
         $repository = static::getContainer()->get(UserRepository::class);
@@ -88,7 +88,7 @@ class UserControllerTest extends WebTestCase
         $this->loginUser($client, 'admin@gmail.com');
         $user = $this->getUser('johndoe@gmail.com');
 
-        $client->request('GET', '/users/' . $user->getId() . '/edit');
+        $client->request('GET', '/users/'.$user->getId().'/edit');
         $this->assertSelectorTextContains('h2', 'Modifier le compte '.$user->getUsername());
     }
 
@@ -99,7 +99,7 @@ class UserControllerTest extends WebTestCase
         $this->loginUser($client, 'admin@gmail.com');
 
         $user = $this->getUser('johndoe@gmail.com');
-        $client->request('GET', '/users/' . $user->getId() . '/edit');
+        $client->request('GET', '/users/'.$user->getId().'/edit');
 
         $client->submitForm('Modifier', [
             'user[username]' => 'John Doe Edited',
@@ -107,7 +107,7 @@ class UserControllerTest extends WebTestCase
             'user[plainPassword][first]' => 'password123',
             'user[plainPassword][second]' => 'password123',
             'user[roles]' => ['ROLE_USER'],
-            'user[isVerified]' => true
+            'user[isVerified]' => true,
         ]);
 
         $repository = static::getContainer()->get(UserRepository::class);

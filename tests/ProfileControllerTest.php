@@ -22,9 +22,9 @@ class ProfileControllerTest extends WebTestCase
         $client = static::createClient();
         $this->makeFixture();
         $user = $this->loginUser($client, 'johndoe@gmail.com');
-        
+
         $crawler = $client->request('GET', '/profile');
-        
+
         $this->assertResponseIsSuccessful();
         $this->assertSelectorTextContains('h2', 'Profil');
         $username = $crawler->filter('#profile_username')->extract(['value']);
@@ -46,7 +46,7 @@ class ProfileControllerTest extends WebTestCase
 
         $userRepository = static::getContainer()->get(UserRepository::class);
         $user = $userRepository->findOneBy(['email' => 'johndoeedited@gmail.com']);
-        
+
         $this->assertNotNull($user);
     }
 
@@ -77,7 +77,7 @@ class ProfileControllerTest extends WebTestCase
 
         $userRepository = static::getContainer()->get(UserRepository::class);
         $user = $userRepository->findOneBy(['email' => 'johndoe@gmail.com']);
-        
+
         $this->assertNotEquals($user->getUsername(), 'JohnDoe2');
     }
 

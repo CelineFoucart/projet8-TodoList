@@ -2,10 +2,8 @@
 
 namespace App\Tests\Repository;
 
-use App\Entity\User;
-use App\Tests\FixtureTrait;
-use Doctrine\ORM\EntityManager;
 use App\Repository\UserRepository;
+use App\Tests\FixtureTrait;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
@@ -18,7 +16,7 @@ final class UserRepositoryTest extends KernelTestCase
         self::bootKernel();
         $this->makeFixture();
     }
-    
+
     public function testUpgradePassword(): void
     {
         /** @var UserRepository */
@@ -28,7 +26,7 @@ final class UserRepositoryTest extends KernelTestCase
         $paswordHasher = static::getContainer()->get(UserPasswordHasherInterface::class);
 
         $userRepository->upgradePassword($user, $paswordHasher->hashPassword($user, 'passwordedited123'));
-        
+
         $this->assertTrue($paswordHasher->isPasswordValid($user, 'passwordedited123'));
     }
 }

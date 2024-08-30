@@ -43,7 +43,7 @@ class RegistrationController extends AbstractController
              * @var string
              */
             $plainPassword = $form->get('plainPassword')->getData();
-            $user->setPassword( $userPasswordHasher->hashPassword($user,$plainPassword));
+            $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
             $entityManager->persist($user);
             $entityManager->flush();
 
@@ -55,7 +55,7 @@ class RegistrationController extends AbstractController
                     ->htmlTemplate('registration/confirmation_email.html.twig')
             );
 
-            $response = $userAuthenticator->authenticateUser($user, $authenticator,  $request);
+            $response = $userAuthenticator->authenticateUser($user, $authenticator, $request);
 
             if (null === $response) {
                 return $this->redirectToRoute('login');

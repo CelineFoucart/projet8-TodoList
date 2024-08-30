@@ -26,9 +26,9 @@ class DefaultControllerTest extends WebTestCase
         $client = static::createClient();
         $this->makeFixture();
         $this->loginUser($client, 'johndoe@gmail.com');
-        
+
         $client->request('GET', '/');
-        
+
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
         $this->assertSelectorTextContains('.btn-success', 'Créer une nouvelle tâche');
         $this->assertSelectorTextContains('.btn-info', 'Consulter la liste des tâches à faire');
