@@ -11,7 +11,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Task
 {
     /**
-     * @var int|null the entity id
+     * @var integer|null the entity id
      */
     #[ORM\Id]
     #[ORM\GeneratedValue]
