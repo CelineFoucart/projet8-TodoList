@@ -19,10 +19,14 @@ final class UserRepositoryTest extends KernelTestCase
 
     public function testUpgradePassword(): void
     {
-        /** @var UserRepository */
+        /** 
+         * @var UserRepository 
+         */
         $userRepository = static::getContainer()->get(UserRepository::class);
         $user = $userRepository->findOneBy(['email' => 'johndoe@gmail.com']);
-        /** @var UserPasswordHasherInterface */
+        /** 
+         * @var UserPasswordHasherInterface 
+         */
         $paswordHasher = static::getContainer()->get(UserPasswordHasherInterface::class);
 
         $userRepository->upgradePassword($user, $paswordHasher->hashPassword($user, 'passwordedited123'));

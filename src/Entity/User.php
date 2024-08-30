@@ -16,7 +16,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     /**
-     * @var int|null the entity id
+     * @var integer|null the entity id
      */
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -51,7 +51,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $username = null;
 
     /**
-     * @var bool|null if the user email is verified
+     * @var boolean|null if the user email is verified
      */
     #[ORM\Column(type: 'boolean')]
     private ?bool $isVerified = false;

@@ -97,7 +97,9 @@ class ProfileControllerTest extends WebTestCase
         $userRepository = static::getContainer()->get(UserRepository::class);
         $user = $userRepository->findOneBy(['email' => 'johndoe@gmail.com']);
 
-        /** @var UserPasswordHasherInterface */
+        /** 
+         * @var UserPasswordHasherInterface
+         */
         $paswordHasher = static::getContainer()->get(UserPasswordHasherInterface::class);
         $this->assertTrue($paswordHasher->isPasswordValid($user, 'passwordedited123'));
     }
